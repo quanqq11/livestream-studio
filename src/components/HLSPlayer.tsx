@@ -24,6 +24,6 @@ export default function HLSPlayer({ src }: HLSPlayerProps) {
     }
   }, [src]);
 
-  return <video ref={videoRef} controls autoPlay muted style={{ height: "50vh" }} />;
+  return <video ref={videoRef} controls autoPlay muted style={{ height: "230px" }} />;
 }
 
