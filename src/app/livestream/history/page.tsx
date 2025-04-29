@@ -34,10 +34,10 @@ export default function StreamHistory() {
         console.log('Edit stream', id);
         // router.push(`/livestream/edit/${id}`); // Uncomment to enable editing functionality
     };
-
+    const [messageApi, contextHolder] = message.useMessage()
     const handleDelete = (id: number) => {
         console.log('Delete stream', id);
-        message.success('Stream deleted successfully');
+        messageApi.success('Stream deleted successfully');
     };
 
     const columns = [
@@ -100,6 +100,7 @@ export default function StreamHistory() {
 
     return (
         <div style={{ padding: 24 }}>
+            {contextHolder}
             <Title level={2}>Stream History</Title>
 
             <Table

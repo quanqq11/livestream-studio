@@ -4,6 +4,7 @@ import { Avatar, Button, Card, Dropdown, Input, Layout, Menu, MenuProps, Space }
 import { CalendarOutlined, CameraOutlined, HistoryOutlined, MailOutlined, MenuOutlined, SearchOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Path } from '@/enums/path';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 const { Header, Footer, Sider, Content } = Layout;
 const { Item } = Menu
 interface CommonLayoutProps {
@@ -11,6 +12,7 @@ interface CommonLayoutProps {
 }
 
 const CommonLayout: React.FC<CommonLayoutProps> = ({ children }) => {
+    const pathname = usePathname(); // Get the current pathname
     type MenuItem = Required<MenuProps>['items'][number];
 
     const items: MenuItem[] = [
@@ -64,6 +66,7 @@ const CommonLayout: React.FC<CommonLayoutProps> = ({ children }) => {
                         style={{ width: 'auto' }}
                         mode="horizontal"
                         items={items}
+                        defaultSelectedKeys={[pathname]}
                     />
                 </div>
             </Header>
@@ -74,7 +77,7 @@ const CommonLayout: React.FC<CommonLayoutProps> = ({ children }) => {
 
                 </Sider>
                 <Layout>
-                    <Content className="p-3">
+                    <Content className="p-3 h-full overflow-auto">
                         {children}
                     </Content>
                 </Layout>
