@@ -40,7 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     setRequestLocale(locale);
     return (
         <html lang={locale}>
-            <body>
+            <body suppressHydrationWarning>
                 <NextIntlClientProvider>
                     <LayoutClient>
                         {children}

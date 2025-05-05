@@ -13,7 +13,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 import CommonLayout from '@/components/layouts/CommonLayout';
 import EmptyLayout from '@/components/layouts/EmptyLayout';
-
+NProgress.configure({ showSpinner: false }); // Disable the spinner
 export default function LayoutClient({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 

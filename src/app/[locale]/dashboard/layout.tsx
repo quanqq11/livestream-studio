@@ -1,33 +1,60 @@
 'use client'
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Button, Dropdown, Flex, Input, Layout, Menu, MenuProps } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, HistoryOutlined, HomeFilled, MailOutlined, SettingOutlined, UnorderedListOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 const { Header, Footer, Sider, Content } = Layout;
 
 interface DashboardLayoutProps {
-
+    children: ReactNode
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     type MenuItem = Required<MenuProps>['items'][number];
 
     const items: MenuItem[] = [
         {
-            key: 'sub1',
-            label: 'Navigation One',
-            icon: <MailOutlined />,
+            key: '/',
+            label: 'Home',
+            icon: <HomeFilled />,
+        },
+
+        {
+            key: '/service',
+            label: 'Services',
+            icon: <UnorderedListOutlined />,
         },
         {
-            key: 'sub2',
-            label: 'Navigation Two',
-            icon: <AppstoreOutlined />,
+            key: '/schedule',
+            label: 'Schedules',
+            icon: <HistoryOutlined />,
         },
         {
-            type: 'divider',
+            key: '/video',
+            label: 'Videos',
+            icon: <VideoCameraOutlined />,
+        },
+
+
+        {
+            key: '/user',
+            label: 'Users',
+            icon: <UserOutlined />,
+            children: [
+                {
+                    key: '/permistion',
+                    label: 'Permistions',
+                    icon: <HistoryOutlined />,
+                },
+            ]
         },
         {
-            key: 'sub4',
-            label: 'Navigation Three',
+            key: '/history',
+            label: 'History',
+            icon: <HistoryOutlined />,
+        },
+        {
+            key: '/setting',
+            label: 'Settings',
             icon: <SettingOutlined />,
         },
 
@@ -79,8 +106,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             </Header>
             <Layout>
                 <Sider className="border-r border-gray-200">
-
-
                     <Menu
                         className="!border-none"
                         onClick={onClick}
@@ -90,7 +115,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
                         items={items}
                     />
                 </Sider>
-                <Content>Content</Content>
+                <Content className="h-full overflow-auto p-3">{children}</Content>
             </Layout>
         </Layout>
     </>

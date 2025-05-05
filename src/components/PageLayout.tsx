@@ -10,11 +10,11 @@ type Props = {
 export default function PageLayout({ children, title }: Props) {
     const t = useTranslations('PageLayout');
     return (
-        <div className="relative flex grow flex-col bg-slate-850 py-36">
+        <div className="">
             <h1>
                 {title}
             </h1>
-            <div className="mt-6 text-gray-400 md:text-lg">{children}</div>
+            {children}
         </div>
     );
 }

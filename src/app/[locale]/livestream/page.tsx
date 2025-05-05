@@ -1,83 +1,153 @@
+// app/livestream/page.tsx (or pages/livestream.tsx)
 'use client';
 
-import LivestreamSetupForm from "@/components/ui/livestream_setup";
-import { Card, Col, Form, Input, Row, Tabs, TabsProps } from "antd";
-import dynamic from "next/dynamic";
-// Dynamically import HLSPlayer to skip SSR
-const HLSPlayer = dynamic(() => import('@/components/HLSPlayer'), {
-    ssr: false,
-    loading: () => <div>Loading video player...</div>,
-});
+import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Row, Col, Card, Typography, Input, Button, List, message, Divider } from 'antd';
+import { VideoCameraOutlined, MessageOutlined, EyeOutlined } from '@ant-design/icons';
+import io from 'socket.io-client';
 
-export default function Home() {
+// Dynamic import for HLS video player
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
-    const onChange = (key: string) => {
-        console.log(key);
+const { Title, Text } = Typography;
+const { TextArea } = Input;
+
+// Socket.io client connection
+const socket = io('http://localhost:5000');  // Your server URL here
+
+const LivestreamPage: React.FC = () => {
+  const [chatMessages, setChatMessages] = useState<string[]>([]);
+  const [newMessage, setNewMessage] = useState<string>('');
+  const [viewers, setViewers] = useState<number>(0);
+
+  useEffect(() => {
+    // Listen for new chat messages
+    socket.on('chatMessage', (msg: string) => {
+      setChatMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    // Listen for viewer count updates
+    socket.on('viewerCount', (count: number) => {
+      setViewers(count);
+    });
+
+    return () => {
+      socket.off('chatMessage');
+      socket.off('viewerCount');
     };
+  }, []);
 
-    const items: TabsProps['items'] = [
-        {
-            key: '1',
-            label: 'Tab 1',
-            children: 'Content of Tab Pane 1',
-        },
-        {
-            key: '2',
-            label: 'Tab 2',
-            children: 'Content of Tab Pane 2',
-        },
-        {
-            key: '3',
-            label: 'Tab 3',
-            children: 'Content of Tab Pane 3',
-        },
-    ];
-    return (
-        <div className="h-full grid gap-3 grid-rows-2 ">
-            <Card classNames={{ body: "!p-2 !py-0" }} className="!rounded-none">
-                <HLSPlayer src="http://127.0.0.1:81/hls/stream.m3u8" />
-            </Card>
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      socket.emit('sendMessage', newMessage);
+      setNewMessage('');
+    } else {
+      message.warning('Please enter a message.');
+    }
+  };
 
-            <Card classNames={{ body: "!p-2 !py-0" }} className="!rounded-none">
-                <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-                <Row>
-                    <Col span={12}>
-                        <LivestreamSetupForm/>
-                        <Form
-                            name="basic"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 16 }}
-                            style={{ maxWidth: 600 }}
-                            initialValues={{ remember: true }}
-                            autoComplete="off"
-                        >
-                            <div className="text-sm">
-                                Stream key:
-                                <Form.Item
-                                    label="Username"
-                                    name="username"
-                                    noStyle
-                                >
+  return (
+    <div style={{ padding: '32px 24px', background: '#ffffff' }}>
+      <Title level={3} >Livestream: Enterprise Product Launch</Title>
 
-                                    <Input variant="borderless" className="!border-b !rounded-none" />
-                                </Form.Item>
-                            </div>
-                            <Form.Item
-                                label="Password"
-                                name="password"
-                                noStyle
-                            >
-                                <Input.Password />
-                            </Form.Item>
-                        </Form>
-                    </Col>
-                    <Col span={12}>col-12</Col>
-                </Row>
+      <Row gutter={[24, 24]} justify="center">
+        {/* Left Column: Video Player */}
+        <Col xs={24} md={16}>
+          <Card
+            style={{ borderRadius: 12, overflow: 'hidden' }}
+            cover={
+              <ReactPlayer
+                url="https://path-to-your-hls-stream.m3u8" // Replace with actual HLS stream URL
+                playing={true}
+                controls
+                width="100%"
+                height="100%"
+                style={{ borderRadius: 12 }}
+              />
+            }
+            title="Live Stream"
+            extra={<VideoCameraOutlined />}
+            classNames={{ body:"p-4" }}
+          >
+            <Text strong style={{ fontSize: 16, display: 'block', marginBottom: 12, color: '#333' }}>Total Viewers: {viewers}</Text>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text type="secondary" style={{ fontSize: 14, color: '#666' }}>Join the conversation below</Text>
+              <Button type="primary" shape="round" size="middle" icon={<MessageOutlined />} style={{ backgroundColor: '#1E90FF', borderColor: '#1E90FF' }}>Chat</Button>
+            </div>
+          </Card>
+        </Col>
 
-            </Card>
-        </div>
-    );
-}
+        {/* Right Column: Widgets + Chat */}
+        <Col xs={24} md={8}>
+          <Row gutter={[16, 16]}>
+            {/* Widget: Real-time Stats */}
+            <Col span={24}>
+              <Card
+                title="Live Stats"
+                extra={<EyeOutlined />}
+                style={{ borderRadius: 12 }}
+              >
+                <Text type="secondary" style={{ display: 'block', marginBottom: 8, color: '#666' }}>Viewer Count</Text>
+                <Title level={3} style={{ color: '#1E90FF' }}>{viewers}</Title>
+              </Card>
+            </Col>
 
+            {/* Widget: Chat */}
+            <Col span={24}>
+              <Card
+                title="Live Chat"
+                extra={<MessageOutlined />}
+                style={{ borderRadius: 12 }}
+              >
+                <div style={{ maxHeight: 300, overflowY: 'auto', marginBottom: 12 }}>
+                  <List
+                    dataSource={chatMessages}
+                    renderItem={(msg, index) => (
+                      <List.Item key={index} style={{ marginBottom: 8 }}>
+                        <Text>{msg}</Text>
+                      </List.Item>
+                    )}
+                  />
+                </div>
 
+                {/* Message Input */}
+                <TextArea
+                  rows={3}
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Type your message..."
+                  style={{ marginBottom: 12, borderRadius: 8, borderColor: '#1E90FF' }}
+                />
+                <Button
+                  type="primary"
+                  onClick={handleSendMessage}
+                  style={{
+                    width: '100%',
+                    borderRadius: 8,
+                    fontSize: 16,
+                    padding: '8px 0',
+                    backgroundColor: '#1E90FF',
+                    borderColor: '#1E90FF',
+                  }}
+                >
+                  Send Message
+                </Button>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+
+      <Divider style={{ marginTop: 32 }} />
+
+      {/* Footer */}
+      <div style={{ textAlign: 'center', marginTop: 32 }}>
+        <Text type="secondary" style={{ color: '#666' }}>Powered by Livestream Co. | All rights reserved.</Text>
+      </div>
+    </div>
+  );
+};
+
+export default LivestreamPage;
 
