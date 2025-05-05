@@ -112,6 +112,7 @@ const HomePage = () => {
                         ))}
                     </div>
                 </div>
+
                 {/* Results Section */}
                 <div className="mt-16">
                     <Title level={3}>
@@ -144,58 +145,38 @@ const HomePage = () => {
                         </Card>
                     </div>
                 </div>
-
-                {/* Solution Studio Section (Results Section) */}
+                {/* Results Section */}
                 <div className="mt-16">
-                    <Title level={3} className="text-blue-600">
+                    <Title level={3}>
                         <StarOutlined /> Why Use Solution Studio?
                     </Title>
                     <div className="grid md:grid-cols-2 gap-6 mt-6">
                         <Card className="shadow rounded-xl">
-                            <Title level={4} className="text-blue-600">Custom Solutions</Title>
-                            <Paragraph className="text-gray-600">
+                            <Title level={4}>Custom Solutions</Title>
+                            <Paragraph>
                                 Tailored solutions for every enterprise need, ensuring seamless integration and scalability.
                             </Paragraph>
                         </Card>
                         <Card className="shadow rounded-xl">
-                            <Title level={4} className="text-blue-600">Enterprise-Level Security</Title>
-                            <Paragraph className="text-gray-600">
+                            <Title level={4}>Enterprise-Level Security</Title>
+                            <Paragraph>
                                 Solution Studio offers cutting-edge security features to protect your streams, data, and viewers.
                             </Paragraph>
                         </Card>
                         <Card className="shadow rounded-xl">
-                            <Title level={4} className="text-blue-600">Dedicated Support</Title>
-                            <Paragraph className="text-gray-600">
+                            <Title level={4}>Dedicated Support</Title>
+                            <Paragraph>
                                 Receive priority support from our expert team, ensuring the highest uptime and reliability.
                             </Paragraph>
                         </Card>
                         <Card className="shadow rounded-xl">
-                            <Title level={4} className="text-blue-600">Real-Time Analytics</Title>
-                            <Paragraph className="text-gray-600">
+                            <Title level={4}>Real-Time Analytics</Title>
+                            <Paragraph>
                                 Track your streams in real-time with advanced analytics tools for audience engagement and performance.
                             </Paragraph>
                         </Card>
                     </div>
                 </div>
-
-                {/* Carousel Section */}
-                <div className="mt-16">
-                    <Title level={3}>
-                        <VideoCameraOutlined /> Featured Streams
-                    </Title>
-                    <Carousel autoplay className="mt-4">
-                        {[1, 2, 3].map(i => (
-                            <Card key={i} title={`Event #${i}`} variant="borderless">
-                                <img
-                                    src={`https://via.placeholder.com/800x300?text=Stream+${i}`}
-                                    alt={`Stream ${i}`}
-                                    className="w-full rounded-lg"
-                                />
-                            </Card>
-                        ))}
-                    </Carousel>
-                </div>
-
                 {/* FAQ Section */}
                 <div className="mt-16">
                     <Title level={3}>
