@@ -1,4 +1,4 @@
-# 🎥 Livestream Studio
+# Livestream Studio
 
 **Livestream Studio** is a web-based platform that allows users to create personal channels, broadcast livestreams, manage stream sessions, and interact with viewers in real-time.
 
@@ -81,4 +81,4 @@ Feedback, issues, and pull requests are always welcome. Please open an issue or 
 
 ---
 
-**© 2025 – Livestream Studio Team**
+**© 2025 – Livestream Studio**
